@@ -1,13 +1,18 @@
 const CustomersModel = require("../models/customers");
+const { crypto } = require("../utils/password");
 
-function add(req, res) {
+// Envio de informações para o banco
+async function add(req, res) {
   const { name, age, email, password } = req.body;
+
+  // Criptografando a senha
+  const passwordCrypto = await crypto(password);
 
   const register = new CustomersModel({
     name,
     age,
     email,
-    password
+    password: passwordCrypto
   });
 
   register.save();
