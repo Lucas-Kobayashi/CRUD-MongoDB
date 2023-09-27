@@ -13,4 +13,8 @@ router.post("/register/add", CustomersController.add);
 // Listar usuários
 router.get("/list", CustomersController.listUsers);
 
+// Editar
+router.get("/edit", CustomersController.indexEdit);
+router.post("/edit/:id", CustomersController.edit);
+
 module.exports = router;

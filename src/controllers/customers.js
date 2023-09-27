@@ -1,9 +1,13 @@
 const CustomersModel = require("../models/customers");
+const { use } = require("../routes");
 const { crypto } = require("../utils/password");
 
+const defaultTitle = "Cadastro de Clientes";
+
+// Tela de registro
 function index(req, res) {
   res.render("register", {
-    title: "Cadastro de clientes"
+    title: defaultTitle
   });
 }
 
@@ -22,9 +26,13 @@ async function add(req, res) {
   });
 
   register.save();
-  res.send("Cadastro finalizado");
+  res.render("register", {
+    title: defaultTitle,
+    message: "Cadastro realizado com sucesso"
+  });
 }
 
+// Lista de usuários
 async function listUsers(req, res) {
   const users = await CustomersModel.find();
 
@@ -34,8 +42,40 @@ async function listUsers(req, res) {
   });
 }
 
+async function indexEdit(req, res) {
+  const { id } = req.query;
+
+  const user = await CustomersModel.findById(id);
+
+  res.render("edit", {
+    title: "Editar usuário",
+    user
+  });
+}
+
+async function edit(req, res) {
+  const { name, age, email } = req.body;
+
+  const { id } = req.params;
+  const user = await CustomersModel.findById(id);
+
+  user.name = name;
+  user.age = age;
+  user.email = email;
+
+  user.save();
+
+  res.render("edit", {
+    title: "Editar usuário",
+    user,
+    message: "Usuário alterado com sucesso"
+  });
+}
+
 module.exports = {
   index,
   add,
-  listUsers
+  listUsers,
+  indexEdit,
+  edit
 };
