@@ -72,10 +72,19 @@ async function edit(req, res) {
   });
 }
 
+async function remove(req, res) {
+  const { id } = req.params;
+
+  const remove = await CustomersModel.deleteOne({ _id: id });
+
+  res.redirect("/list");
+}
+
 module.exports = {
   index,
   add,
   listUsers,
   indexEdit,
-  edit
+  edit,
+  remove
 };
